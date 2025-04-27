@@ -3,7 +3,10 @@ import "./App.css";
 import Header from "./components/Header";
 import ModalDialog from "./components/ModalDialog";
 import Sidebar from "./components/Sidebar";
+import NoteList from "./components/NoteList";
 import NotesContextProvider from "./store/NotesContextProvider";
+import addIcon from "./assets/add-icon.svg";
+import AddNoteModal from "./components/AddNoteModal";
 
 function App() {
   const modalRef = useRef();
@@ -16,26 +19,17 @@ function App() {
     <NotesContextProvider>
       <Header />
       <Sidebar />
-      <ModalDialog ref={modalRef} />
+      <NoteList />
+
+      <ModalDialog ref={modalRef}>
+        <AddNoteModal modalRef={modalRef} />
+      </ModalDialog>
+
       <button
         onClick={handleAddNoteButton}
-        className="fixed z-20 right-4 bottom-8 bg-cyan-600 block leading-[0] p-2 rounded-full"
+        className="fixed z-20 right-4 bottom-8 bg-cyan-600 block p-4 rounded-full"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          id="Add--Streamline-Sharp-Material"
-          height={32}
-          width={32}
-        >
-          <desc>{"Add Streamline Icon: https://streamlinehq.com"}</desc>
-          <path
-            fill="#ffffff"
-            d="M11.25 12.75H5v-1.5h6.25V5h1.5v6.25H19v1.5H12.75V19h-1.5V12.75Z"
-            strokeWidth={0.5}
-          />
-        </svg>
+        <img className="w-6 " src={addIcon} alt="" />
       </button>
     </NotesContextProvider>
   );
