@@ -14,7 +14,11 @@ export default function NoteModal({ id, title, body, modalRef }) {
 
   function handleUpdateNote(e) {
     e.preventDefault();
-    updateNote(id, noteTitle.current.value, noteBody.current.value);
+    updateNote({
+      id: id,
+      title: noteTitle.current.value,
+      body: noteBody.current.value,
+    });
     modalRef.current.close();
     e.target.reset();
   }

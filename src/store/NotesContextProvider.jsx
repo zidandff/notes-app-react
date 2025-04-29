@@ -1,55 +1,72 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import { NotesContext } from "./NotesContext";
 import { v4 as uuidv4 } from "uuid";
 
-export default function NotesContextProvider({ children }) {
-  const [notes, setNotes] = useState([]);
+// --- ACTIONS REDUCER ---
+const ACTIONS = {
+  CREATE: "CREATE",
+  UPDATE: "UPDATE",
+  DELETE: "DELETE",
+};
 
-  function handleCreateNote(noteData) {
-    setNotes((prev) => {
+function notesReducer(state, action) {
+  switch (action.type) {
+    case ACTIONS.CREATE: {
       const newNote = {
         id: uuidv4(),
-        ...noteData,
+        ...action.payload,
       };
 
-      return [newNote, ...prev];
+      return [newNote, ...state];
+    }
+
+    case ACTIONS.UPDATE: {
+      return state.map((note) =>
+        note.id === action.payload.id ? { ...note, ...action.payload } : note
+      );
+    }
+
+    case ACTIONS.DELETE: {
+      return state.filter((note) => note.id !== action.payload.id);
+    }
+    default:
+      return state;
+  }
+}
+
+export default function NotesContextProvider({ children }) {
+  const [notes, dispatch] = useReducer(notesReducer, []);
+
+  function handleCreateNote(noteData) {
+    dispatch({
+      type: ACTIONS.CREATE,
+      payload: noteData,
     });
   }
 
   function handleDeleteNote(id) {
-    setNotes((prev) => {
-      return prev.filter((note) => note.id !== id);
+    dispatch({
+      type: ACTIONS.DELETE,
+      payload: { id },
     });
   }
 
-  function handleUpdateNote(id, title, body) {
-    setNotes((prevNotes) => {
-      //  === GPT SOLUTION: cleaner & simpler ===
-      // performance not really good for big data because even the targeted note has found the iteration will still going until end of element
-      return prevNotes.map((note) =>
-        note.id == id ? { id, title, body } : note
-      );
-
-      // === MY SOLUTION: performance wise, more verbose ===
-      // const newNotes = [...prevNotes];
-      // const updatedNoteIndex = newNotes.findIndex((note) => note.id == id);
-      // const updatedNote = {
-      //   ...newNotes[updatedNoteIndex],
-      //   title: title,
-      //   body: body,
-      // };
-      // newNotes[updatedNoteIndex] = updatedNote;
-      // return newNotes;
+  function handleUpdateNote(noteData) {
+    dispatch({
+      type: ACTIONS.UPDATE,
+      payload: noteData,
     });
   }
 
-  const ctxValue = {
+  const contexValue = {
     notes: notes,
     createNote: handleCreateNote,
     deleteNote: handleDeleteNote,
     updateNote: handleUpdateNote,
   };
   return (
-    <NotesContext.Provider value={ctxValue}>{children}</NotesContext.Provider>
+    <NotesContext.Provider value={contexValue}>
+      {children}
+    </NotesContext.Provider>
   );
 }
