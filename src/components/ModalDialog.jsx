@@ -1,7 +1,7 @@
 import { useImperativeHandle, useRef } from "react";
 import { NotesContext } from "../store/NotesContext";
 
-export default function ModalDialog({ ref, children }) {
+export default function ModalDialog({ ref, children, onClose }) {
   const modal = useRef();
 
   useImperativeHandle(ref, () => {
@@ -26,6 +26,7 @@ export default function ModalDialog({ ref, children }) {
       ref={modal}
       className="bg-transparent w-full backdrop:bg-black/40 backdrop:backdrop-blur-sm"
       onClick={handleCloseClickOutside}
+      onClose={onClose}
     >
       {children}
     </dialog>

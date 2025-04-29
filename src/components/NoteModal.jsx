@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from "react";
+import { useRef, useContext } from "react";
 import { NotesContext } from "../store/NotesContext";
 
 import closeIcon from "../assets/close-icon.svg";
@@ -6,8 +6,7 @@ import editIcon from "../assets/edit-icon.svg";
 import archiveIcon from "../assets/archived-icon.svg";
 import trashIcon from "../assets/trash-icon.svg";
 
-export default function NoteModal({ id, title, body, modalRef }) {
-  const [isEdit, setIsEdit] = useState(false);
+export default function NoteModal({ id, title, body, isEdit, setIsEdit }) {
   const noteTitle = useRef();
   const noteBody = useRef();
   const { deleteNote, updateNote } = useContext(NotesContext);
@@ -19,12 +18,7 @@ export default function NoteModal({ id, title, body, modalRef }) {
       title: noteTitle.current.value,
       body: noteBody.current.value,
     });
-    modalRef.current.close();
     e.target.reset();
-  }
-
-  function handleClickEdit() {
-    setIsEdit((prev) => !prev);
   }
 
   return (
@@ -53,7 +47,7 @@ export default function NoteModal({ id, title, body, modalRef }) {
               <img className="w-5" src={archiveIcon} alt="" />
             </button>
             <button
-              onClick={handleClickEdit}
+              onClick={() => setIsEdit(true)}
               className="bg-gray-200 p-2 rounded-full hover:bg-gray-300"
             >
               <img className="w-5" src={editIcon} alt="" />
