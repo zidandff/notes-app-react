@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { saveNotesToStorage } from "./localStorage";
 
 // --- ACTIONS REDUCER ---
 export const ACTIONS = {
@@ -15,17 +16,24 @@ export function notesReducer(state, action) {
         ...action.payload,
       };
 
+      saveNotesToStorage([newNote, ...state]);
       return [newNote, ...state];
     }
 
     case ACTIONS.UPDATE: {
-      return state.map((note) =>
+      const updatedNotes = state.map((note) =>
         note.id === action.payload.id ? { ...note, ...action.payload } : note
       );
+      saveNotesToStorage(updatedNotes);
+      return updatedNotes;
     }
 
     case ACTIONS.DELETE: {
-      return state.filter((note) => note.id !== action.payload.id);
+      const updatedNotes = state.filter(
+        (note) => note.id !== action.payload.id
+      );
+      saveNotesToStorage(updatedNotes);
+      return updatedNotes;
     }
     default:
       return state;

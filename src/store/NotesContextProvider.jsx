@@ -1,9 +1,12 @@
 import { useReducer } from "react";
 import { NotesContext } from "./NotesContext";
 import { ACTIONS, notesReducer } from "./notesReducer";
+import { loadNotesFromStorage } from "./localStorage";
 
 export default function NotesProvider({ children }) {
-  const [notes, dispatch] = useReducer(notesReducer, []);
+  const [notes, dispatch] = useReducer(notesReducer, loadNotesFromStorage());
+
+  console.log(notes);
 
   function createNote(noteData) {
     dispatch({
