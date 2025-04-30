@@ -6,8 +6,6 @@ import { loadNotesFromStorage } from "./localStorage";
 export default function NotesProvider({ children }) {
   const [notes, dispatch] = useReducer(notesReducer, loadNotesFromStorage());
 
-  console.log(notes);
-
   function createNote(noteData) {
     dispatch({
       type: ACTIONS.CREATE,
