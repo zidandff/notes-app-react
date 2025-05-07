@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import NoteModal from "./NoteModal";
 import ModalDialog from "./ModalDialog";
+import { NotesContext } from "../store/NotesContext";
 
 import editIcon from "../assets/edit-icon.svg";
 import archiveIcon from "../assets/archived-icon.svg";
@@ -8,9 +9,11 @@ import trashIcon from "../assets/trash-icon.svg";
 
 export default function NoteItem({ id, title, body }) {
   const [isEdit, setIsEdit] = useState(false);
+  const { deleteNote } = useContext(NotesContext);
   const modal = useRef();
 
   function handleOpenModal() {
+    console.log("buka");
     modal.current.open();
   }
 
@@ -21,6 +24,11 @@ export default function NoteItem({ id, title, body }) {
 
   function handleCloseModal() {
     setIsEdit(false);
+  }
+
+  function handleDeleteNote(e) {
+    e.stopPropagation();
+    deleteNote(id);
   }
 
   return (
@@ -47,7 +55,10 @@ export default function NoteItem({ id, title, body }) {
         </div>
 
         <div className="flex justify-end gap-2">
-          <button className="bg-gray-200 p-2 rounded-full hover:bg-gray-300">
+          <button
+            onClick={handleDeleteNote}
+            className="bg-gray-200 p-2 rounded-full hover:bg-gray-300"
+          >
             <img className="w-5" src={trashIcon} alt="" />
           </button>
           <button className="bg-gray-200 p-2 rounded-full hover:bg-gray-300">
