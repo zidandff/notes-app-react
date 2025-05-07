@@ -20,7 +20,6 @@ export default function NoteItem({ id, title, body }) {
   }
 
   function handleCloseModal() {
-    console.log("halooo");
     setIsEdit(false);
   }
 
@@ -44,7 +43,7 @@ export default function NoteItem({ id, title, body }) {
       >
         <div>
           <h2 className="text-lg font-medium">{title}</h2>
-          <p className="whitespace-pre-wrap line-clamp-4">{body}</p>
+          <p className="whitespace-pre-wrap line-clamp-3">{body}</p>
         </div>
 
         <div className="flex justify-end gap-2">

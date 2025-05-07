@@ -10,22 +10,31 @@ export default function NoteModal({ id, title, body }) {
   const noteBody = useRef();
   const { deleteNote, updateNote } = useContext(NotesContext);
 
-  function handleUpdateNote(e) {
-    e.preventDefault();
+  function handleUpdateNote() {
     updateNote({
       id: id,
       title: noteTitle.current.value,
       body: noteBody.current.value,
     });
-    e.target.reset();
   }
 
   return (
     <div className="w-full md:w-[450px] min-h-[50dvh] overflow-auto mx-auto flex flex-col justify-between bg-gray-100 px-6 py-4 rounded-2xl relative">
-      <form onSubmit={handleUpdateNote}>
-        <Input ref={noteTitle} value={title} className="text-lg font-medium" />
-        <Input textarea ref={noteBody} value={body} rows={10} />
-      </form>
+      <div>
+        <Input
+          ref={noteTitle}
+          defaultValue={title}
+          className="text-lg font-medium"
+          onChange={handleUpdateNote}
+        />
+        <Input
+          textarea
+          ref={noteBody}
+          defaultValue={body}
+          rows={10}
+          onChange={handleUpdateNote}
+        />
+      </div>
       <div className="flex justify-between">
         <div className="flex justify-end gap-2">
           <button
